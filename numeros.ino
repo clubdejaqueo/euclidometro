@@ -66,7 +66,7 @@ const byte PROGMEM numeros[] = {
   0xAE, 0xA2, 0xEE, 0x8A, 0x8E,
 };
 
-void debug_numeros () {
+void print_numeros (int steps, int pulses, int divisor) {
   for (int i = 0; i < 5; i++) {
     byte q = pgm_read_byte(numeros + steps * 5 + i);
     for (int b = 0; b < 8; b++) {
@@ -77,7 +77,15 @@ void debug_numeros () {
     for (int b = 0; b < 8; b++) {
       Serial.print(bitRead(q, b) ? "O" : " ");
     }
+    Serial.print("    ");
+    q = pgm_read_byte(numeros + divisor * 5 + i);
+    for (int b = 0; b < 8; b++) {
+      Serial.print(bitRead(q, b) ? "O" : " ");
+    }
     Serial.println();
   }
 }
 
+void Channel::debug_numeros() {
+  print_numeros(values[STEPS], values[PULSES], values[DIVISOR]);
+}
