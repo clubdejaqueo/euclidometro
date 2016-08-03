@@ -86,6 +86,13 @@ void print_numeros (int steps, int pulses, int divisor) {
   }
 }
 
+byte get_numero (int n, int row) {
+  if (row > 4) {
+    return 0;
+  }
+  return pgm_read_byte(numeros + n*5 + row);
+}
+
 void Channel::debug_numeros() {
   print_numeros(values[STEPS], values[PULSES], values[DIVISOR]);
 }

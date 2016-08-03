@@ -50,11 +50,13 @@ Clock clock(120 * 24);
 void tick() {
   control.tick();
 
+/*
   Serial.write(27);
   Serial.print("[H");     // cursor to home command
 
   control.debug_numeros();
   control.debug_lineas();
+*/
   display_pattern(control.get_selected().get_pattern());
 }
 
@@ -69,6 +71,7 @@ void serialEvent() {
 
 void setup() {
   display_setup();
+  matrix_setup();
   clock.setHandleClock(tick);
   Serial.begin (115200);
   Serial.write(27);       // ESC command
@@ -115,6 +118,8 @@ void Control::button_pushed() {
   ENC.SetCounter(val, _minCounts, _maxCounts);
   Serial.println(val);
   
+  matrix_set(val, encoder_focus);
+  
   lastCount = 256;
   /*
   for (int n = 0; n < 3; n++) {
@@ -127,11 +132,13 @@ void Control::button_pushed() {
 void Control::encoder_changed(int value) {
   channels[current_channel].set_value(encoder_focus, value);
   control.values_changed();
+  matrix_set(value, encoder_focus);
 }
 
 void loop() {
 
   clock.loop();
+  matrix_loop();
 
   if (ENC.PushButtonState() == ENC_BTN_UP) {
     control.button_pushed();
