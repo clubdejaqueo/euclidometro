@@ -1,11 +1,13 @@
 #include <BitBool.h>
 
-const int MAX_STEPS = 64;
+const int MAX_STEPS = 16;
 
 const int NUM_VALUES = 3;
 const int STEPS = 0;
 const int PULSES = 1;
 const int DIVISOR = 2;
+
+typedef BitBool<MAX_STEPS> Pattern;
 
 class Channel {
     void build_string(int level);
@@ -13,7 +15,7 @@ class Channel {
     int step;
     int tick;
     //array to hold the output of Bjorklund's Algo
-    BitBool<MAX_STEPS> pattern;
+    Pattern pattern;
 
   public:
     Channel() : tick(0) {
@@ -32,6 +34,10 @@ class Channel {
 
     int get_value(int n) {
       return values[n];
+    }
+
+    Pattern& get_pattern() {
+      return pattern; 
     }
 
     void values_changed();
@@ -54,11 +60,11 @@ class Control {
 
     void tick();
     void values_changed() {
-      channels[current_channel].values_changed();
+      get_selected().values_changed();
     }
 
     void debug_numeros() {
-      channels[current_channel].debug_numeros();
+      get_selected().debug_numeros();
     }
 
     void debug_lineas() {
@@ -69,4 +75,8 @@ class Control {
     void encoder_changed(int value);
 
     void button_pushed();
+    
+    Channel& get_selected() {
+      return channels[current_channel];
+    }
 };

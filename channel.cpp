@@ -30,9 +30,9 @@ void Channel::clock() {
 void Channel::debug_linea() {
   for (int i = 0; i < values[STEPS]; i++) {
     if (i == step) {
-      Serial.print(pattern[i] ? "+" : "O");
+      Serial.print(pattern[i] ? "O" : "+");
     } else {
-      Serial.print(pattern[i] ? "-" : "o");
+      Serial.print(pattern[i] ? "o" : "-");
     }
   }
 
@@ -47,7 +47,7 @@ void Channel::debug_linea() {
 
 void Channel::debug_grilla() {
   for (int i = 0; i < values[STEPS]; i++) {
-    Serial.print(pattern[i] ? "-" : "O");
+    Serial.print(pattern[i] ? "O" : "-");
     if ((i % 8) == 0) {
       Serial.println();
     }
@@ -66,11 +66,11 @@ void Channel::debug_grilla() {
 //Bjorklund accessory function to build the output..
 void Channel::build_string (int level)  {
   if (level == -1) {
-    pattern[values[STEPS] - 1 - stepstatus] = true; //insert 0 into array
+    pattern[values[STEPS] - 1 - stepstatus] = false; //insert 0 into array
     stepstatus = stepstatus + 1;  //move to next
   }
   else if (level == -2)  {
-    pattern[values[STEPS] - 1 - stepstatus] = false; //insert 1 into array
+    pattern[values[STEPS] - 1 - stepstatus] = true; //insert 1 into array
     stepstatus = stepstatus + 1;  //move to next
   }
   else {
@@ -83,6 +83,7 @@ void Channel::build_string (int level)  {
 
 //Here's where the magic happens...
 void Channel::values_changed()  {
+  pattern = Pattern();
   int num_slots = values[STEPS];
   int num_pulses = values[PULSES];
   if (num_pulses > num_slots) {

@@ -55,6 +55,7 @@ void tick() {
 
   control.debug_numeros();
   control.debug_lineas();
+  display_pattern(control.get_selected().get_pattern());
 }
 
 void serialEvent() {
@@ -67,6 +68,7 @@ void serialEvent() {
 }
 
 void setup() {
+  display_setup();
   clock.setHandleClock(tick);
   Serial.begin (115200);
   Serial.write(27);       // ESC command
